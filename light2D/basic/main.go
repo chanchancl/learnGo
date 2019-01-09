@@ -60,7 +60,7 @@ func main() {
 
 	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	dirname := filepath.Base(dir)
-	dirpath, _ := filepath.Abs(dir + "..")
+	dirpath, _ := filepath.Abs(dir + "/..")
 
 	timestr := time.Now().Format("2006-01-02 15-04-05")
 	filename := fmt.Sprintf("%s-%s.png", dirname, timestr)

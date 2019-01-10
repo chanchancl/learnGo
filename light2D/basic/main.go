@@ -15,7 +15,7 @@ import (
 const (
 	Width        = 512
 	Height       = 512
-	N            = 64
+	N            = 128
 	MAX_STEP     = 10
 	MAX_DISTANCE = 2.0
 	EPSILON      = 1e-6
@@ -42,7 +42,9 @@ func trace(ox, oy, dx, dy float64) float64 {
 func sample(x, y float64) float64 {
 	sum := 0.0
 	for i := 0; i < N; i++ {
-		a := math.Pi * 2 * rand.Float64()
+		//a := 2 * math.Pi * rand.Float64()
+		//a := 2 * math.Pi * float64(i) / N
+		a := 2 * math.Pi * (float64(i) + rand.Float64()) / N
 		sum += trace(x, y, math.Cos(a), math.Sin(a))
 	}
 	return sum / N

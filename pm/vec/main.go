@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -19,6 +20,8 @@ func main() {
 	vec.WithLabelValues("success").Add(0)
 	vec.WithLabelValues("failure").Add(0)
 	vec.WithLabelValues("total").Inc()
+	
 	http.Handle("/metrics", prometheus.Handler())
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Listening!")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

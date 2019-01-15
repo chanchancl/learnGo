@@ -21,15 +21,11 @@ func main() {
 
 	httpReqs.WithLabelValues("404", "POST").Add(42)
 
-	// If you have to access the same set of labels very frequently, it
-	// might be good to retrieve the metric only once and keep a handle to
-	// it. But beware of deletion of that metric, see below!
 	m := httpReqs.WithLabelValues("200", "GET")
 	for i := 0; i < 1000000; i++ {
 		m.Inc()
 	}
-	// The Handler function provides a default handler to expose metrics
-	// via an HTTP server. "/metrics" is the usual endpoint for that.
+
 	http.Handle("/metrics", promhttp.Handler())
 
 	fmt.Println("Listening!")

@@ -1,10 +1,7 @@
 package main
 
 import (
-	"context"
 	"log"
-	"math/rand"
-	"time"
 
 	grpc "google.golang.org/grpc"
 )
@@ -21,40 +18,40 @@ func main() {
 	}
 	defer con.Close()
 
-	// 2. Create a client use con
-	client := pm.NewMetricsClient(con)
+	// // 2. Create a client use con
+	// client := pm.NewMetricsClient(con)
 
-	metric := &pm.Metric{
-		Name:        "Serve_Request",
-		Description: "Count of Server_Request",
-		Type:        pm.MetricType_COUNTER,
-		Labels:      []string{"type"},
-		Values:      []string{"200"},
-	}
+	// metric := &pm.Metric{
+	// 	Name:        "Serve_Request",
+	// 	Description: "Count of Server_Request",
+	// 	Type:        pm.MetricType_COUNTER,
+	// 	Labels:      []string{"type"},
+	// 	Values:      []string{"200"},
+	// }
 
-	// 3. create a context for operation
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	// // 3. create a context for operation
+	// ctx, cancel := context.WithCancel(context.Background())
+	// defer cancel()
 
-	// 4. register metric
-	client.Register(ctx, metric)
+	// // 4. register metric
+	// client.Register(ctx, metric)
 
-	// 5. operate the metric
-	go func() {
-		for {
-			metric.Values[0] = "200"
-			log.Printf("Increase :%v", metric)
-			client.Increase(ctx, metric)
+	// // 5. operate the metric
+	// go func() {
+	// 	for {
+	// 		metric.Values[0] = "200"
+	// 		log.Printf("Increase :%v", metric)
+	// 		client.Increase(ctx, metric)
 
-			if rand.Float32() < 0.5 {
-				metric.Values[0] = "404"
-				log.Printf("Increase :%v", metric)
-				client.Increase(ctx, metric)
-			}
+	// 		if rand.Float32() < 0.5 {
+	// 			metric.Values[0] = "404"
+	// 			log.Printf("Increase :%v", metric)
+	// 			client.Increase(ctx, metric)
+	// 		}
 
-			time.Sleep(time.Second)
-		}
-	}()
+	// 		time.Sleep(time.Second)
+	// 	}
+	// }()
 
 	select {}
 }

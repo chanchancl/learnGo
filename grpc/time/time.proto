@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package time;
+
+import "google/protobuf/empty.proto";
+
+message Time {
+    string now = 1;
+}
+
+service TimeNow {
+    rpc GetTime(google.protobuf.Empty) returns (Time) ;
+}

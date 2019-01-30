@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 type Test struct {
-	a string "abc"
-	b string "def"
+	a string `abc`
+	b string `def`
 }
 
 func main() {

@@ -15,7 +15,6 @@ func main() {
 		MinBytes:  10e3,
 		MaxBytes:  10e6,
 	})
-	fmt.Printf("%v", r.Stats())
 
 	r.SetOffset(kafka.LastOffset)
 	for {

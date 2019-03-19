@@ -22,6 +22,7 @@ type server struct{}
 
 func (sv *server) GetTime(context.Context, *empty.Empty) (*timeProto.Time, error) {
 	ret := fmt.Sprintf("现在已经 %v 啦!", time.Now())
+	time.Sleep(time.Duration(5) * time.Second)
 	log.Println(ret)
 	return &timeProto.Time{Now: ret}, nil
 }

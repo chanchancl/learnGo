@@ -26,14 +26,15 @@ func main() {
 	client := timeProto.NewTimeNowClient(con)
 
 	for {
+		fmt.Printf("开始调用GRPC %v\n", time.Now())
 		now, err := client.GetTime(context.Background(), &empty.Empty{})
 		if err != nil {
-			log.Printf("%v", err)
+			fmt.Printf("%v", err)
 		} else {
-			fmt.Printf("%v\n", time.Now())
-			log.Printf("%v\n", now.Now)
+			fmt.Printf("本地 时间 %v\n", time.Now())
+			fmt.Printf("GRPC 时间 %v\n", now.Now)
 		}
 		time.Sleep(time.Duration(rand.Float32() * float32(time.Second)))
 	}
-
+	grpc.WithBackoffMaxDelay
 }

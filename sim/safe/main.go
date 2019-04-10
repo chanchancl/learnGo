@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
+	"time"
 )
 
 type Entity struct {
@@ -19,24 +19,24 @@ func main() {
 
 	go func() {
 		for {
-			mp := <-handler
-			fmt.Println("Start!!!!!")
-			for _, k := range mp {
-				fmt.Printf("    %v\n", k)
-			}
+			time.Sleep(time.Second)
+			//fmt.Println("Start!!!!!")
+			//for _, k := range mp {
+			//	fmt.Printf("    %v\n", k)
+			//}
 		}
 	}()
-
-	for i := 0; i < 1; i++ {
+	entity.value = make(map[string]interface{})
+	for i := 0; i < 5; i++ {
 		go func() {
 			for {
-				entity.value = make(map[string]interface{})
-				for i := 0; i < 1000; i++ {
+
+				for i := 0; i < 10; i++ {
 					entity.value[strconv.Itoa(i)] = i
 				}
-				handler <- entity.value
+				//handler <- entity.value
 
-				entity.value = nil
+				//entity.value = nil
 			}
 		}()
 	}

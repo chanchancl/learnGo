@@ -6,9 +6,11 @@ import (
 	"time"
 )
 
-const LOOP = 1000000
+const LOOP = 10000000
 
 func main() {
+	fmt.Println("Benchmark.itoa Start!\n")
+
 	startTime := time.Now()
 	for i := 0; i < LOOP; i++ {
 		fmt.Sprintf("%d", i)

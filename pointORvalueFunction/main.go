@@ -6,7 +6,7 @@ type Animal interface {
 	Color()
 }
 
-type Dog {
+type Dog struct {
 }
 
 func (d Dog) Color() {

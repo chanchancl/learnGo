@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	vec = prometheus.NewCounterVec(prometheus.CounterOpts{Name: "CounterVec", Help: " "},
+	vec = prometheus.NewCounterVec(prometheus.CounterOpts{Name: "Counter-Vec", Help: " "},
 		[]string{"count"})
 )
 
@@ -19,7 +19,7 @@ func init() {
 }
 
 func main() {
-	vec.WithLabelValues("success").Inc()
+	vec.WithLabelValues("su-ccess").Inc()
 	vec.WithLabelValues("failure").Inc()
 	vec.WithLabelValues("total").Inc()
 

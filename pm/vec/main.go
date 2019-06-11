@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	vec = prometheus.NewCounterVec(prometheus.CounterOpts{Name: "Counter-Vec", Help: " "},
-		[]string{"count"})
+	vec = prometheus.NewCounterVec(prometheus.CounterOpts{Name: "CounterVec", Help: " "},
+		[]string{"method", "status", "resource"})
 )
 
 func init() {
@@ -19,9 +19,9 @@ func init() {
 }
 
 func main() {
-	vec.WithLabelValues("su-ccess").Inc()
-	vec.WithLabelValues("failure").Inc()
-	vec.WithLabelValues("total").Inc()
+	vec.WithLabelValues("success", "", "").Inc()
+	// vec.WithLabelValues("failure").Inc()
+	// vec.WithLabelValues("total").Inc()
 
 	http.Handle("/metrics", promhttp.Handler())
 	fmt.Println("Listening!")

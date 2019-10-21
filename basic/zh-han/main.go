@@ -7,10 +7,11 @@ import (
 
 func main() {
 	reader := strings.NewReader("Go你好呀")
-	p := make([]byte, 3)
+	p := make([]byte, 100)
 	n, err := reader.ReadAt(p, 2)
+	p = p[:n]
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	fmt.Printf("%s, %b, %d\n", p, p, n)
 }

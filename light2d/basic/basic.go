@@ -41,7 +41,7 @@ type Render interface {
 type BasicRender struct {
 	sampler Sampler
 	Img     *image.RGBA
-	config  RenderConfig
+	config  *RenderConfig
 }
 
 func (this *BasicRender) SetSampler(sampler Sampler) {
@@ -71,7 +71,7 @@ func (this *BasicRender) Write(file io.Writer) {
 	png.Encode(file, this.Img)
 }
 
-func NewRender(config RenderConfig) BasicRender {
+func NewRender(config *RenderConfig) BasicRender {
 	render := BasicRender{
 		Img:    image.NewRGBA(image.Rect(0, 0, config.RenderWidth, config.RenderHeight)),
 		config: config,

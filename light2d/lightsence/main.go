@@ -14,6 +14,7 @@ const (
 	MAX_STEP     = 64
 	MAX_DISTANCE = 3.0
 	EPSILON      = 1e-6
+	OUTPUT_NAME  = "output sence 2.png"
 )
 
 type MySampler struct{}
@@ -23,15 +24,55 @@ func circleSDF(x, y, cx, cy, r float64) float64 {
 	return math.Sqrt(ux*ux+uy*uy) - r
 }
 
+type SceneResult struct {
+	sd, emissive float64
+}
+
+func unionOp(a, b SceneResult) SceneResult {
+	if a.sd < b.sd {
+		return a
+	}
+	return b
+}
+
+func intersectOp(a, b SceneResult) SceneResult {
+	r := a
+	if a.sd > b.sd {
+		r = b
+	}
+	r.sd = math.Max(a.sd, b.sd)
+	return r
+}
+
+func subtractOp(a, b SceneResult) SceneResult {
+	r := a
+	r.sd = math.Max(a.sd, -b.sd)
+	if a.sd > -b.sd {
+		r.emissive = a.emissive
+	} else {
+		r.emissive = b.emissive
+	}
+	return r
+}
+
+func scene(x, y float64) SceneResult {
+	r1 := SceneResult{circleSDF(x, y, 0.3, 0.5, 0.2), 2}
+	r2 := SceneResult{circleSDF(x, y, 0.42, 0.5, 0.1), 0.2}
+	r3 := SceneResult{circleSDF(x, y, 0.7, 0.5, 0.05), 2}
+
+	return unionOp(subtractOp(r1, r2), r3)
+	//return unionOp(unionOp(r1, r2), r3)
+}
+
 func trace(ox, oy, dx, dy float64) float64 {
 	var t float64
 	t = 0
 	for i := 0; i < MAX_STEP && t < MAX_DISTANCE; i++ {
-		sd := circleSDF(ox+dx*t, oy+dy*t, 0.5, 0.5, 0.1)
-		if sd < EPSILON {
-			return 2.0
+		r := scene(ox+dx*t, oy+dy*t)
+		if r.sd < EPSILON {
+			return r.emissive
 		}
-		t += sd
+		t += r.sd
 	}
 	return 0.0
 }
@@ -52,7 +93,7 @@ func (this MySampler) Sample(x, y float64) float64 {
 }
 
 func main() {
-	file, err := os.Create("output.png")
+	file, err := os.Create(OUTPUT_NAME)
 	if err != nil {
 		fmt.Println("Error to create output file.")
 		return
@@ -69,13 +110,6 @@ func main() {
 	render.BeginRender()
 
 	fmt.Printf("%vx%v use time %vs\n", W, H, time.Since(start))
-
-	// for x := 0; x < 512; x++ {
-	// 	cl := color.Gray{uint8(float32(x) / float32(512) * 255)}
-	// 	for y := 0; y < 100; y++ {
-	// 		render.Img.Set(x, y, cl)
-	// 	}
-	// }
 
 	render.Write(file)
 }

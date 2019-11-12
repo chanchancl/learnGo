@@ -2,3 +2,6 @@
 # ignore all exe
 *.exe
 debug
+
+# ignore all image
+*.png

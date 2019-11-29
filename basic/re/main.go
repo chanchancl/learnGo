@@ -36,7 +36,6 @@ func main() {
 
 	for _, ip := range IPs {
 		if matchIP(ip) {
-
 			fmt.Printf("Matach %s. ", ip)
 		} else {
 			fmt.Printf("Doesn't match %s. ", ip)

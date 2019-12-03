@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
@@ -18,7 +19,14 @@ const (
 )
 
 func main() {
-	lissajous(os.Stdout)
+	f, err := os.Create("test.gif")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer f.Close()
+
+	lissajous(f)
 }
 
 func lissajous(out io.Writer) {

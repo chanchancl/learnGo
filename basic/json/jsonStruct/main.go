@@ -21,4 +21,10 @@ func main() {
 	}
 	b, _ := json.Marshal(a)
 	fmt.Println(string(b))
+
+	a = MyJsonName{
+		B: "2",
+	}
+	b, _ = json.Marshal(a)
+	fmt.Println(string(b))
 }

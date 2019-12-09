@@ -13,12 +13,14 @@ type MyJsonName struct {
 	A *Ta    `json:"a,omitempty"`
 	B string `json:"b,omitempty"`
 	C string `json:"c"`
+	D uint32 `json:"d,omitempty"`
 }
 
 func main() {
 	a := MyJsonName{
 		A: &Ta{Text: "123"},
 	}
+	a.D = 0
 	b, _ := json.Marshal(a)
 	fmt.Println(string(b))
 
@@ -26,5 +28,6 @@ func main() {
 		B: "2",
 	}
 	b, _ = json.Marshal(a)
+
 	fmt.Println(string(b))
 }

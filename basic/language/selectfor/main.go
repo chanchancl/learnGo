@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 	intChan := make(chan int, 10)
@@ -24,4 +27,19 @@ func main() {
 		syncChan <- struct{}{}
 	}()
 	<-syncChan
+
+	c := make(chan int)
+	go func() {
+		select {
+		case <-c:
+			fmt.Println("233")
+		default:
+			time.Sleep(time.Second)
+
+		}
+		fmt.Println("here?")
+	}()
+
+	close(c)
+	time.Sleep(time.Second * 5)
 }

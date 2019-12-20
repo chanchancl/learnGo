@@ -31,8 +31,8 @@ func main() {
 	c := make(chan int)
 	go func() {
 		select {
-		case <-c:
-			fmt.Println("233")
+		case a, err := <-c:
+			fmt.Printf("233 %v %v\n", a, err)
 		default:
 			time.Sleep(time.Second)
 

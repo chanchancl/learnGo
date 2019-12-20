@@ -9,7 +9,7 @@ import (
 const LOOP = 100000
 
 func main() {
-	fmt.Println("Benchmark.itoa Start!\n")
+	fmt.Println("Benchmark.itoa Start!")
 
 	startTime := time.Now()
 	for i := 0; i < LOOP; i++ {

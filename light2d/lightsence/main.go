@@ -104,7 +104,11 @@ func main() {
 	W := 512
 
 	start := time.Now()
-	render := light.NewRender(&light.RenderConfig{W, H})
+	render := light.NewRender(
+		&light.RenderConfig{
+			RenderWidth:  W,
+			RenderHeight: H,
+		})
 
 	render.SetSampler(MySampler{})
 	render.BeginRender()

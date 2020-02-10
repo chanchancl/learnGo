@@ -15,7 +15,7 @@ func main() {
 func read(path string, indent int) {
 	infos, err := ioutil.ReadDir(path)
 	if err != nil {
-		fmt.Println("Read %s failed, %s\n", path, err.Error())
+		fmt.Printf("Read %s failed, %s\n", path, err.Error())
 		return
 	}
 	for _, info := range infos {

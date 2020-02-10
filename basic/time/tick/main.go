@@ -6,30 +6,18 @@ import (
 )
 
 func main() {
-	ticker := time.NewTicker(time.Second * 1)
-	a := make(chan int)
-	b := make(chan int)
-	exit := false
-	go func() {
-		for {
-			if exit {
-				b <- 5
-				break
-			}
-			select {
-			case <-ticker.C:
-				ticker = time.NewTicker(time.Second * 1)
-				fmt.Println("233")
-				//break
-			case <-a:
-				fmt.Println("exit")
-				exit = true
-				break
-			}
+	// ticker := time.NewTicker(time.Second)
+	// for {
+	// 	select {
+	// 	case <-ticker.C:
+	// 		fmt.Println("233")
+	// 	}
+	// }
+	C := time.Tick(time.Second)
+	for {
+		select {
+		case <-C:
+			fmt.Println("233")
 		}
-	}()
-
-	time.Sleep(time.Second*3 + 100000)
-	a <- 5
-	<-b
+	}
 }

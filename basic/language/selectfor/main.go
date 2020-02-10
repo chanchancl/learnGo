@@ -40,6 +40,15 @@ func main() {
 		fmt.Println("here?")
 	}()
 
-	close(c)
 	time.Sleep(time.Second * 5)
+
+	a := make(chan int)
+	go func() { a <- 1 }()
+	select {
+	case <-a:
+		fmt.Println("1")
+	case <-c:
+		fmt.Println("2")
+	}
+	close(c)
 }

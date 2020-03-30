@@ -9,7 +9,7 @@ type Mock struct {
 func main() {
 	mock := &Mock{}
 
-	// use directly
+	// use directly, panic
 	// mock.a[1] = 1
 	// fmt.Printf("%v", mock)
 

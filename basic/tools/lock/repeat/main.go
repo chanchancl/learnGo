@@ -8,20 +8,23 @@ import (
 
 func main() {
 	var mutex sync.Mutex
-	fmt.Println("Lock the lock. (main)")
+	fmt.Println("Acquire the mutex. (main)")
 	mutex.Lock()
-	fmt.Println("The lock is locked. (main)")
+	fmt.Println("The lock is acquired. (main)")
 	for i := 0; i < 3; i++ {
 		go func(i int) {
-			fmt.Printf("Lock the lock. (g%d)\n", i)
+			fmt.Printf("\tAcquire the mutex. (g%d)\n", i)
 			mutex.Lock()
-			defer mutex.Unlock()
-			fmt.Printf("The lock is locked. (g%d)\n", i)
+			defer func() {
+				fmt.Printf("\tRelease the mutex. (g%d)\n", i)
+				mutex.Unlock()
+			}()
+			fmt.Printf("\tThe lock is acquired. (g%d)\n", i)
 		}(i)
 	}
 	time.Sleep(time.Second)
-	fmt.Println("Unlock the lock. (main)")
+	fmt.Println("Release the lock. (main)")
 	mutex.Unlock()
-	fmt.Println("The lock is unlocked. (main)")
+	fmt.Println("The lock is released. (main)")
 	time.Sleep(time.Second)
 }

@@ -1,11 +1,18 @@
 package main
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"strings"
 )
 
 func main() {
+	sum := sha256.New()
+	sum.Write([]byte("really?"))
+	fmt.Printf("%x", sum.Sum(nil))
+}
+
+func f3() {
 	a := make([]byte, 10)
 	b := []byte(string("abc"))
 	copy(a, b)

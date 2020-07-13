@@ -4,9 +4,31 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"strings"
+	"sync"
 )
 
 func main() {
+	var s sync.Mutex
+	{
+		s.Lock()
+		defer s.Unlock()
+		print("233")
+	}
+	fmt.Println("Try to lock")
+	s.Lock()
+	fmt.Println("Lock success")
+	s.Unlock()
+	fmt.Print("Unlock")
+}
+
+func f5() {
+	str := "abcdef015.ghi234.abcdefghijk.abc"
+	Mnc := str[6:9]
+	Mcc := str[13:16]
+	fmt.Println(Mnc, Mcc)
+}
+
+func f4() {
 	sum := sha256.New()
 	sum.Write([]byte("really?"))
 	fmt.Printf("%x", sum.Sum(nil))

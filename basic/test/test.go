@@ -8,6 +8,17 @@ import (
 )
 
 func main() {
+	str := "abc def ghi"
+	str = strings.Replace(str, "abc", "ABC", 1)
+	str = strings.Replace(str, "def", "DEF", 1)
+	str = strings.Replace(str, "ghi", "GHI", 1)
+	fmt.Println(str)
+
+	sp := strings.Split(str, " ")
+	fmt.Printf("%#v\n", sp)
+}
+
+func f6() {
 	var s sync.Mutex
 	{
 		s.Lock()

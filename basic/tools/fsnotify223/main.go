@@ -14,8 +14,8 @@ func main() {
 	fmt.Printf("%#v\n", watcher)
 	if watcher == nil {
 		// error!!!!!!!!!!!!!!!!!
-		// if one var is undefined
-		// then all of them are new vars
+		// if one variable is undefined on the left of :=
+		// then all of them are new local varables
 		watcher, err := fsnotify.NewWatcher()
 		fmt.Printf("%#v\n", watcher)
 		if err != nil {

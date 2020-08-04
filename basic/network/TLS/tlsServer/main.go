@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,7 @@ func main() {
 		Addr:    ":8080",
 		Handler: httpMux,
 	}
+
 	go func() {
 		fmt.Println("Http server is running.")
 		httpServer.ListenAndServe()
@@ -37,7 +39,8 @@ func main() {
 		Addr:    "localhost:8088",
 		Handler: httpsMux,
 		TLSConfig: &tls.Config{
-			NextProtos: []string{"http/1.1"}, // this server will use http/1.1, otherwise http/2.0
+			//NextProtos:   []string{"http/1.1"}, // this server will use http/1.1, otherwise http/2.0
+			KeyLogWriter: os.Stdout,
 		},
 	}
 

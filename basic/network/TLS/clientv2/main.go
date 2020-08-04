@@ -5,6 +5,7 @@ import (
 	"crypto/x509"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 func main() {
@@ -26,6 +27,7 @@ func main() {
 		RootCAs:            clientCertPool,
 		Certificates:       []tls.Certificate{cert},
 		InsecureSkipVerify: true,
+		KeyLogWriter:       os.Stdout,
 	}
 
 	conn, err := tls.Dial("tcp", "localhost:8080", &conf)

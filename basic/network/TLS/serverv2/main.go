@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
+	"os"
 )
 
 func main() {
@@ -31,6 +32,7 @@ func main() {
 		Certificates: []tls.Certificate{cert},
 		ClientAuth:   tls.RequireAndVerifyClientCert,
 		ClientCAs:    clientCertPool,
+		KeyLogWriter: os.Stdout,
 	}
 	ln, err := tls.Listen("tcp", ":8080", &config)
 	if err != nil {

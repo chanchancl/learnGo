@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	kafka "github.com/segmentio/kafka-go"
 )
@@ -18,11 +19,13 @@ func main() {
 
 	r.SetOffset(kafka.LastOffset)
 	for {
-		fmt.Println("Reading messages")
+		fmt.Printf("Reading messages :%s\n", time.Now())
 		m, err := r.ReadMessage(context.Background())
 		if err != nil {
+			fmt.Println(err.Error())
 			break
 		}
+		fmt.Printf("After Reading messages :%s\n", time.Now())
 		fmt.Printf("Message at partition %d, offset %d: %s = %s\n", m.Partition, m.Offset, string(m.Key), string(m.Value))
 	}
 }

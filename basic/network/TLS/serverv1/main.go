@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"log"
 	"net"
+	"os"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 		return
 	}
 
-	config := tls.Config{Certificates: []tls.Certificate{cert}}
+	config := tls.Config{Certificates: []tls.Certificate{cert}, KeyLogWriter: os.Stdout}
 	ln, err := tls.Listen("tcp", ":8080", &config)
 	if err != nil {
 		log.Println(err)

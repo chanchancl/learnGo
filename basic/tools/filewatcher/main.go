@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 )
@@ -14,6 +16,7 @@ var (
 	gWatcher *fsnotify.Watcher
 	gMutex   sync.Mutex
 	gCb      map[string]FileChangeCallback
+	gCloseCh chan struct{}
 )
 
 // WatchFile only watch the REMOVE operation
@@ -46,6 +49,8 @@ func WatchFile(path string, cb FileChangeCallback) error {
 					if !ok {
 						return
 					}
+				case <-gCloseCh:
+					return
 				}
 			}
 		}()
@@ -69,6 +74,9 @@ func Stop() {
 	gMutex.Lock()
 	defer gMutex.Unlock()
 	if gWatcher != nil {
+		gCloseCh <- struct{}{}
+		close(gCloseCh)
+		gCloseCh = nil
 		gWatcher.Close()
 		gWatcher = nil
 		gCb = nil
@@ -76,12 +84,28 @@ func Stop() {
 }
 
 func main() {
-	err := WatchFile("./t/123", func() {
+	called := false
+	f, _ := os.Create("testfile")
+	f.Close()
+
+	err := WatchFile("testfile", func() {
 		fmt.Println("Trigger!")
+		called = true
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	select {}
+
+	if err := os.Remove("testfile"); err != nil {
+		fmt.Println(err.Error())
+	}
+
+	time.Sleep(time.Second)
+
+	if called == true {
+		fmt.Println("Success")
+	} else {
+		fmt.Println("Not ok")
+	}
 }

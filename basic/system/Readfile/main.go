@@ -22,6 +22,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// dd if=/dev/zero of=tmp.data bs=10000k count=1
+	// before run
 	httpMux := http.NewServeMux()
 	httpMux.HandleFunc("/", Handler)
 	httpServer := http.Server{

@@ -7,7 +7,23 @@ import (
 	"sync"
 )
 
+func removeTokenURLQuery(s string) string {
+	// Post "https://hostname:port/path/token?query": error
+	start := strings.Index(s, "token")
+	end := strings.LastIndex(s, "\":")
+	if start == -1 || end == -1 {
+		return s
+	}
+	str := s[:start+len("token")] + s[end:]
+	return strings.ReplaceAll(str, "\"", "")
+}
+
 func main() {
+	s := "Post \"https://abcdefgtoken?asdbdsa315fe3sa23df\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+	fmt.Println(removeTokenURLQuery(s))
+}
+
+func f7() {
 	str := "abc def ghi"
 	str = strings.Replace(str, "abc", "ABC", 1)
 	str = strings.Replace(str, "def", "DEF", 1)

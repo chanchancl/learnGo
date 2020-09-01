@@ -5,3 +5,5 @@ debug
 
 # ignore all image
 *.png
+
+*/tools/helm/*

@@ -1,0 +1,2 @@
+go tool compile -S main.go > main.S
+rm -f main.o

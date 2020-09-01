@@ -30,6 +30,7 @@ func WatchFile(path string, cb FileChangeCallback) error {
 			return err
 		}
 		gWatcher = watcher
+		gCloseCh = make(chan struct{})
 		gCb = make(map[string]FileChangeCallback)
 		go func() {
 			for {
@@ -41,8 +42,9 @@ func WatchFile(path string, cb FileChangeCallback) error {
 					if !ok {
 						return
 					}
+					fmt.Println("Received event")
 					fmt.Printf("%#v\n", event)
-					if cb, ok := gCb[event.Name]; ok && event.Op&fsnotify.Remove == fsnotify.Remove {
+					if cb, ok := gCb[event.Name]; ok {
 						cb()
 					}
 				case _, ok := <-gWatcher.Errors:
@@ -55,9 +57,7 @@ func WatchFile(path string, cb FileChangeCallback) error {
 			}
 		}()
 	}
-	fmt.Println(path)
 	absPath, err := filepath.Abs(path)
-	fmt.Println(absPath)
 	if err != nil {
 		return err
 	}
@@ -76,36 +76,31 @@ func Stop() {
 	if gWatcher != nil {
 		gCloseCh <- struct{}{}
 		close(gCloseCh)
-		gCloseCh = nil
 		gWatcher.Close()
+		gCloseCh = nil
 		gWatcher = nil
 		gCb = nil
 	}
 }
 
 func main() {
-	called := false
+	called := make(chan struct{})
 	f, _ := os.Create("testfile")
 	f.Close()
-
+	defer os.Remove("teestfile")
 	err := WatchFile("testfile", func() {
-		fmt.Println("Trigger!")
-		called = true
+		called <- struct{}{}
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	if err := os.Remove("testfile"); err != nil {
-		fmt.Println(err.Error())
-	}
-
-	time.Sleep(time.Second)
-
-	if called == true {
+	os.Remove("testfile")
+	select {
+	case <-time.Tick(time.Second):
+		fmt.Println("Failed!")
+	case <-called:
 		fmt.Println("Success")
-	} else {
-		fmt.Println("Not ok")
 	}
 }

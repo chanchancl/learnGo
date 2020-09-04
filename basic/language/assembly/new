@@ -1,0 +1,11 @@
+echo $1
+mkdir $1
+cd $1
+ln -s ../cmd cmd 
+touch main.go
+
+echo 'package main
+
+func main() { 
+  
+}' >> main.go

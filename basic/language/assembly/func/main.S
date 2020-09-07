@@ -33,11 +33,16 @@
 	0x000f 00015 (main.go:8)	PCDATA	$0, $-1
 	0x000f 00015 (main.go:8)	SUBQ	$40, SP
 	// Alloc 40 Byte Size
-	// 
-	// SP + 32,  BP
+	// 5 elements
 	//
-	// SP +  8,  $2
-	// SP +  0,  $1
+	// Before
+	// 0x00(SP) $1
+	// 0x08(SP) $2
+	// 0x10(SP) return value1
+	// 0x18(SP) return value2
+
+
+	// 0x20(SP) BP
 	0x0013 00019 (main.go:8)	MOVQ	BP, 32(SP)
 	0x0018 00024 (main.go:8)	LEAQ	32(SP), BP
 	0x001d 00029 (main.go:8)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
@@ -53,6 +58,7 @@
 	
 	// 0xc00003e750 is added by CALL instruction
 
+	// 0x50 - 0x68 is previous stack
 	// (gdb) x/64xu 0xc00003e750
 	// 0xc00003e750:   243     131     69      0       0       0       0       0   // in call f1
 	// 0xc00003e758:   1       0       0       0       0       0       0       0   // before call
@@ -69,7 +75,6 @@
 	// 0xc00003e778:   0x000000c00003e7d0
 	// 0xc00003e780:   0x000000000042c00a
 	//
-	0x0033 00051 (main.go:11)	MOVQ	$2, (SP)
 	0x0033 00051 (main.go:11)	MOVQ	$2, (SP)
 	0x003b 00059 (main.go:11)	MOVQ	$3, 8(SP)
 	0x0044 00068 (main.go:11)	CALL	"".f1(SB)

@@ -26,8 +26,6 @@
 	// TLS of golang is saved in fs:0xfffffffffffffff8, which is TLS.StackBase
 	// fs:0
 	// 
-
-
 	// typedef struct _NT_TIB
 	// {
 	// 0x00     PEXCEPTION_REGISTRATION_RECORD ExceptionList;
@@ -61,6 +59,12 @@
 	// (08)SP, LEAQ f1.f        // newproc(size, func ptr)
 	// (16)SP, $10
 	// (24)SP, $11
+	// (32)SP,
+	// (40)SP,
+
+	// Previous Stack
+	// (48)SP, Raw BP
+	//
 	// call runtime.newproc
 	0x0042 00066 (main.go:10)	CALL	runtime.newproc(SB)
 	0x0047 00071 (main.go:11)	MOVQ	48(SP), BP

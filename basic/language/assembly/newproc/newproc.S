@@ -10,7 +10,7 @@
 
   proc.go:3523 SUBQ $0x40, SP
   // Stack size 0x40
-  //
+  // 7 locals and arguments, 1 return address
   //
   // (0x38)SP, BP, save BP, and treate it as new BP
   proc.go:3523 MOVQ BP, 0x38(SP)
@@ -23,19 +23,25 @@
   proc.go:3527 MOVUPS X0, 0x28(SP)
   // clear X0 
   // and then clear 0x8(SP) - 0x28(SP), size 0x20, 32 bytes
-  proc.go:3527 LEAQ runtime.newproc.func1(SB), CX
   // mov address of func1 to CX
-  // (0x00)SP 
-  // (0x08)SP 
-  // (0x10)SP 
-  // (0x18)SP 
-  // (0x20)SP 
-  // (0x28)SP 
-  // (0x30)SP 
+  //
+  // Current Stack
+  //-(0x08)SP will be return address
+  // (0x00)SP Raw 0x08(SP), newproc.func1
+  // (0x08)SP newproc.func1 , who will run newproc1
+  // (0x10)SP Raw 0x50(SP)
+  // (0x18)SP Raw 0x58(SP)
+  // (0x20)SP Raw 0x48(SP) MOVL?  CX
+  // (0x28)SP AX
+  // (0x30)SP Raw 0x40(SP)
   // (0x38)SP 
-  // (0x40)SP 
+
+  // Previous Stack (From gofunc/main.S)
+  // (0x40)SP              -> AX
   // (0x48)SP 
   // (0x50)SP 
+  // (0x58)SP 
+  proc.go:3527 LEAQ runtime.newproc.func1(SB), CX
   proc.go:3527 MOVQ CX, 0x8(SP)
   proc.go:3527 LEAQ 0x50(SP), CX
   proc.go:3527 MOVQ CX, 0x10(SP)

@@ -1,12 +1,7 @@
 "".f1 STEXT nosplit size=49 args=0x20 locals=0x0
 	0x0000 00000 (main.go:4)	TEXT	"".f1(SB), NOSPLIT|ABIInternal, $0-32
-	0x0000 00000 (main.go:4)	PCDATA	$0, $-2
-	0x0000 00000 (main.go:4)	PCDATA	$1, $-2
 	0x0000 00000 (main.go:4)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
 	0x0000 00000 (main.go:4)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (main.go:4)	FUNCDATA	$2, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (main.go:4)	PCDATA	$0, $0
-	0x0000 00000 (main.go:4)	PCDATA	$1, $0
 	0x0000 00000 (main.go:4)	MOVQ	$0, "".~r2+24(SP)
 	0x0009 00009 (main.go:4)	MOVQ	$0, "".~r3+32(SP)
 	0x0012 00018 (main.go:5)	MOVQ	"".a+8(SP), AX
@@ -20,33 +15,57 @@
 	0x0010 00 00 48 8b 44 24 08 48 03 44 24 10 48 89 44 24  ..H.D$.H.D$.H.D$
 	0x0020 18 48 8b 44 24 08 48 2b 44 24 10 48 89 44 24 20  .H.D$.H+D$.H.D$ 
 	0x0030 c3                                               .
-"".main STEXT size=88 args=0x0 locals=0x38
+"".main STEXT size=88 args=0x0 locals=0x38 // size : 56 bytes
 	0x0000 00000 (main.go:9)	TEXT	"".main(SB), ABIInternal, $56-0
 	0x0000 00000 (main.go:9)	MOVQ	(TLS), CX
 	0x0009 00009 (main.go:9)	CMPQ	SP, 16(CX)
 	0x000d 00013 (main.go:9)	PCDATA	$0, $-2
 	0x000d 00013 (main.go:9)	JLS	81
+	// The above code is checking the stack size and limit
+	// https://elixir.bootlin.com/linux/v5.9-rc3/source/arch
+	// TLS of golang is saved in fs:0xfffffffffffffff8, which is TLS.StackBase
+	// fs:0
+	// 
+
+
+	// typedef struct _NT_TIB
+	// {
+	// 0x00     PEXCEPTION_REGISTRATION_RECORD ExceptionList;
+	// 0x08     PVOID StackBase;
+	// 0x10     PVOID StackLimit;
+	// ....     PVOID SubSystemTib;
+	// ....     union
+	// ....     {
+	// ....          PVOID FiberData;
+	// ....          ULONG Version;
+	// ....     };
+	// ....     PVOID ArbitraryUserPointer;
+	// ....     PNT_TIB Self;
+	// } NT_TIB, *PNT_TIB;
+	//
 	0x000f 00015 (main.go:9)	PCDATA	$0, $-1
 	0x000f 00015 (main.go:9)	SUBQ	$56, SP
+	// allocate stack
 	0x0013 00019 (main.go:9)	MOVQ	BP, 48(SP)
 	0x0018 00024 (main.go:9)	LEAQ	48(SP), BP
-	0x001d 00029 (main.go:9)	PCDATA	$0, $-2
-	0x001d 00029 (main.go:9)	PCDATA	$1, $-2
 	0x001d 00029 (main.go:9)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
 	0x001d 00029 (main.go:9)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x001d 00029 (main.go:9)	FUNCDATA	$2, gclocals·9fb7f0986f647f17cb53dda1484e0f7a(SB)
-	0x001d 00029 (main.go:10)	PCDATA	$0, $0
-	0x001d 00029 (main.go:10)	PCDATA	$1, $0
 	0x001d 00029 (main.go:10)	MOVL	$32, (SP)
-	0x0024 00036 (main.go:10)	PCDATA	$0, $1
 	0x0024 00036 (main.go:10)	LEAQ	"".f1·f(SB), AX
-	0x002b 00043 (main.go:10)	PCDATA	$0, $0
 	0x002b 00043 (main.go:10)	MOVQ	AX, 8(SP)
 	0x0030 00048 (main.go:10)	MOVQ	$10, 16(SP)
 	0x0039 00057 (main.go:10)	MOVQ	$11, 24(SP)
+	0x0042 00066 (main.go:10)	PCDATA	$1, $0
+	// 56 / 8 = 7
+	// (00)SP, $32
+	// (08)SP, LEAQ f1.f        // newproc(size, func ptr)
+	// (16)SP, $10
+	// (24)SP, $11
+	// call runtime.newproc
 	0x0042 00066 (main.go:10)	CALL	runtime.newproc(SB)
 	0x0047 00071 (main.go:11)	MOVQ	48(SP), BP
 	0x004c 00076 (main.go:11)	ADDQ	$56, SP
+	// delete stack
 	0x0050 00080 (main.go:11)	RET
 	0x0051 00081 (main.go:11)	NOP
 	0x0051 00081 (main.go:9)	PCDATA	$1, $-1
@@ -66,37 +85,6 @@
 	rel 82+4 t=8 runtime.morestack_noctxt+0
 go.cuinfo.packagename. SDWARFINFO dupok size=0
 	0x0000 6d 61 69 6e                                      main
-go.loc."".f1 SDWARFLOC size=0
-go.info."".f1 SDWARFINFO size=82
-	0x0000 03 22 22 2e 66 31 00 00 00 00 00 00 00 00 00 00  ."".f1..........
-	0x0010 00 00 00 00 00 00 00 01 9c 00 00 00 00 01 0f 61  ...............a
-	0x0020 00 00 04 00 00 00 00 01 9c 0f 62 00 00 04 00 00  ..........b.....
-	0x0030 00 00 02 91 08 0f 7e 72 32 00 01 04 00 00 00 00  ......~r2.......
-	0x0040 02 91 10 0f 7e 72 33 00 01 04 00 00 00 00 02 91  ....~r3.........
-	0x0050 18 00                                            ..
-	rel 0+0 t=24 type.int+0
-	rel 7+8 t=1 "".f1+0
-	rel 15+8 t=1 "".f1+49
-	rel 25+4 t=30 gofile../home/zquxbow/go/learnGo/basic/language/assembly/go/main.go+0
-	rel 35+4 t=29 go.info.int+0
-	rel 46+4 t=29 go.info.int+0
-	rel 60+4 t=29 go.info.int+0
-	rel 74+4 t=29 go.info.int+0
-go.range."".f1 SDWARFRANGE size=0
-go.debuglines."".f1 SDWARFMISC size=15
-	0x0000 04 02 12 06 69 06 6a 06 41 04 01 03 7c 06 01     ....i.j.A...|..
-go.loc."".main SDWARFLOC size=0
-go.info."".main SDWARFINFO size=33
-	0x0000 03 22 22 2e 6d 61 69 6e 00 00 00 00 00 00 00 00  ."".main........
-	0x0010 00 00 00 00 00 00 00 00 00 01 9c 00 00 00 00 01  ................
-	0x0020 00                                               .
-	rel 9+8 t=1 "".main+0
-	rel 17+8 t=1 "".main+88
-	rel 27+4 t=30 gofile../home/zquxbow/go/learnGo/basic/language/assembly/go/main.go+0
-go.range."".main SDWARFRANGE size=0
-go.debuglines."".main SDWARFMISC size=19
-	0x0000 04 02 03 03 14 0a a5 9c 06 55 06 08 7e 71 04 01  .........U..~q..
-	0x0010 03 78 01                                         .x.
 ""..inittask SNOPTRDATA size=24
 	0x0000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
 	0x0010 00 00 00 00 00 00 00 00                          ........
@@ -105,5 +93,3 @@ go.debuglines."".main SDWARFMISC size=19
 	rel 0+8 t=1 "".f1+0
 gclocals·33cdeccccebe80329f1fdbee7f5874cb SRODATA dupok size=8
 	0x0000 01 00 00 00 00 00 00 00                          ........
-gclocals·9fb7f0986f647f17cb53dda1484e0f7a SRODATA dupok size=10
-	0x0000 02 00 00 00 01 00 00 00 00 01                    ..........

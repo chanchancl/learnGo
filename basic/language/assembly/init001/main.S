@@ -1,12 +1,7 @@
 "".f1 STEXT nosplit size=49 args=0x20 locals=0x0
 	0x0000 00000 (main.go:3)	TEXT	"".f1(SB), NOSPLIT|ABIInternal, $0-32
-	0x0000 00000 (main.go:3)	PCDATA	$0, $-2
-	0x0000 00000 (main.go:3)	PCDATA	$1, $-2
 	0x0000 00000 (main.go:3)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
 	0x0000 00000 (main.go:3)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (main.go:3)	FUNCDATA	$2, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x0000 00000 (main.go:3)	PCDATA	$0, $0
-	0x0000 00000 (main.go:3)	PCDATA	$1, $0
 	// (gdb) x/g 0xc00003e750
 	// 0xc00003e750:   0x00000000004583f3  //  0(SP) return address, and also 0(SP)
 	// 0xc00003e758:   0x0000000000000001  //  8(SP) argument 1
@@ -45,15 +40,11 @@
 	// SP +  0,  $1
 	0x0013 00019 (main.go:8)	MOVQ	BP, 32(SP)
 	0x0018 00024 (main.go:8)	LEAQ	32(SP), BP
-	0x001d 00029 (main.go:8)	PCDATA	$0, $-2
-	0x001d 00029 (main.go:8)	PCDATA	$1, $-2
 	0x001d 00029 (main.go:8)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
 	0x001d 00029 (main.go:8)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x001d 00029 (main.go:8)	FUNCDATA	$2, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
-	0x001d 00029 (main.go:9)	PCDATA	$0, $0
-	0x001d 00029 (main.go:9)	PCDATA	$1, $0
 	0x001d 00029 (main.go:9)	MOVQ	$1, (SP)
 	0x0025 00037 (main.go:9)	MOVQ	$2, 8(SP)
+	0x002e 00046 (main.go:9)	PCDATA	$1, $0
 	// Before call, SP
 	// sp             0xc00003e758     0xc00003e758
 	0x002e 00046 (main.go:9)	CALL	"".f1(SB)
@@ -79,6 +70,7 @@
 	// 0xc00003e780:   0x000000000042c00a
 	//
 	0x0033 00051 (main.go:11)	MOVQ	$2, (SP)
+	0x0033 00051 (main.go:11)	MOVQ	$2, (SP)
 	0x003b 00059 (main.go:11)	MOVQ	$3, 8(SP)
 	0x0044 00068 (main.go:11)	CALL	"".f1(SB)
 	0x0049 00073 (main.go:12)	MOVQ	32(SP), BP
@@ -102,37 +94,6 @@
 	rel 84+4 t=8 runtime.morestack_noctxt+0
 go.cuinfo.packagename. SDWARFINFO dupok size=0
 	0x0000 6d 61 69 6e                                      main
-go.loc."".f1 SDWARFLOC size=0
-go.info."".f1 SDWARFINFO size=82
-	0x0000 03 22 22 2e 66 31 00 00 00 00 00 00 00 00 00 00  ."".f1..........
-	0x0010 00 00 00 00 00 00 00 01 9c 00 00 00 00 01 0f 61  ...............a
-	0x0020 00 00 03 00 00 00 00 01 9c 0f 62 00 00 03 00 00  ..........b.....
-	0x0030 00 00 02 91 08 0f 7e 72 32 00 01 03 00 00 00 00  ......~r2.......
-	0x0040 02 91 10 0f 7e 72 33 00 01 03 00 00 00 00 02 91  ....~r3.........
-	0x0050 18 00                                            ..
-	rel 0+0 t=24 type.int+0
-	rel 7+8 t=1 "".f1+0
-	rel 15+8 t=1 "".f1+49
-	rel 25+4 t=30 gofile../home/zquxbow/go/learnGo/basic/language/assembly/init001/main.go+0
-	rel 35+4 t=29 go.info.int+0
-	rel 46+4 t=29 go.info.int+0
-	rel 60+4 t=29 go.info.int+0
-	rel 74+4 t=29 go.info.int+0
-go.range."".f1 SDWARFRANGE size=0
-go.debuglines."".f1 SDWARFMISC size=15
-	0x0000 04 02 11 06 69 06 6a 06 41 04 01 03 7d 06 01     ....i.j.A...}..
-go.loc."".main SDWARFLOC size=0
-go.info."".main SDWARFINFO size=33
-	0x0000 03 22 22 2e 6d 61 69 6e 00 00 00 00 00 00 00 00  ."".main........
-	0x0010 00 00 00 00 00 00 00 00 00 01 9c 00 00 00 00 01  ................
-	0x0020 00                                               .
-	rel 9+8 t=1 "".main+0
-	rel 17+8 t=1 "".main+90
-	rel 27+4 t=30 gofile../home/zquxbow/go/learnGo/basic/language/assembly/init001/main.go+0
-go.range."".main SDWARFRANGE size=0
-go.debuglines."".main SDWARFMISC size=23
-	0x0000 04 02 03 02 14 0a a5 9c 06 5f 06 9d 06 5f 06 69  ........._..._.i
-	0x0010 42 6f 04 01 03 79 01                             Bo...y.
 ""..inittask SNOPTRDATA size=24
 	0x0000 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
 	0x0010 00 00 00 00 00 00 00 00                          ........

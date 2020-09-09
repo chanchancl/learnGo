@@ -32,6 +32,8 @@
 	0x000d 00013 (main.go:8)	JLS	83
 	0x000f 00015 (main.go:8)	PCDATA	$0, $-1
 	0x000f 00015 (main.go:8)	SUBQ	$40, SP
+	// After enter a new function, SP refers the return address
+	//
 	// Alloc 40 Byte Size
 	// 5 elements
 	//
@@ -40,9 +42,7 @@
 	// 0x08(SP) $2
 	// 0x10(SP) return value1
 	// 0x18(SP) return value2
-
-
-	// 0x20(SP) BP
+	// 0x20(SP) Raw BP value
 	0x0013 00019 (main.go:8)	MOVQ	BP, 32(SP)
 	0x0018 00024 (main.go:8)	LEAQ	32(SP), BP
 	0x001d 00029 (main.go:8)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
@@ -51,30 +51,46 @@
 	0x0025 00037 (main.go:9)	MOVQ	$2, 8(SP)
 	0x002e 00046 (main.go:9)	PCDATA	$1, $0
 	// Before call, SP
-	// sp             0xc00003e758     0xc00003e758
+	// rsp             0xc00003e758     0xc00003e758
+	// space 0xc00003e758 - 0xc00003e778 are stack for main
+	// space to save return addres don't own any function (at least do not need to allocate and free)
+	// (gdb) x/g $rsp
+	// 00(SP) 0xc00003e758:   0x0000000000000001  // argument 1
+	// 08(SP) 0xc00003e760:   0x0000000000000002  // argument 2
+	// 16(SP) 0xc00003e768:   0x0000000000000202  // space for return value 1
+	// 24(SP) 0xc00003e770:   0x000000c00003e7d0  // space for return value 2
+	// 32(SP) 0xc00003e778:   0x000000c00003e7d0	// Raw BP value
+
+	// 0xc00003e778:   0x000000c00003e7d0  // this maybe previous return address?
+	// 0xc00003e780:   0x000000000042fb29
 	0x002e 00046 (main.go:9)	CALL	"".f1(SB)
-	// In f1, SP
-	// sp             0xc00003e750     0xc00003e750
-	
-	// 0xc00003e750 is added by CALL instruction
-
-	// 0x50 - 0x68 is previous stack
-	// (gdb) x/64xu 0xc00003e750
-	// 0xc00003e750:   243     131     69      0       0       0       0       0   // in call f1
-	// 0xc00003e758:   1       0       0       0       0       0       0       0   // before call
-	// 0xc00003e760:   2       0       0       0       0       0       0       0
-	// 0xc00003e768:   224     28      70      0       0       0       0       0
-	// 0xc00003e770:   88      64      9       0       192     0       0       0   // MOVQ BP 32(SP), BP Value
-
-	// (gdb) x/g 0xc00003e750
-	// 0xc00003e750:   0x00000000004583f3  // return address, and also 0(SP)
-	// 0xc00003e758:   0x0000000000000001  // argument 1
-	// 0xc00003e760:   0x0000000000000002  // argument 2
-	// 0xc00003e768:   0x0000000000461ce0
-	// 0xc00003e770:   0x000000c000094058
-	// 0xc00003e778:   0x000000c00003e7d0
-	// 0xc00003e780:   0x000000000042c00a
+	// In function f11
+	// 1.value of SP sub by 8 (push return address)
+	// rsp             0xc00003e750     0xc00003e750
+	// 2.stack info
+	// (gdb) x/g $rsp
+	// 00(SP) 0xc00003e750:   0x000000000045dab3  // return address
+	// 08(SP) 0xc00003e758:   0x0000000000000001  // argument 1
+	// 16(SP) 0xc00003e760:   0x0000000000000002  // argument 2
+	// 24(SP) 0xc00003e768:   0x0000000000000202  // space for return value 1
+	// 32(SP) 0xc00003e770:   0x000000c00003e7d0  // space for return value 2
+	// 40(SP) 0xc00003e778:   0x000000c00003e7d0	// Raw BP value
 	//
+
+	// from rip we know 0x45dab3 is return address
+	// rip            0x45dab3 0x45dab3 <main.main+51>
+
+	// After function f11 and return to main
+	// 1. value of SP
+	// i r rsp
+	// rsp            0xc00003e758     0xc00003e758
+	// 2. stack info
+	// (gdb) x/g $rsp
+	// 00(SP) 0xc00003e758:   0x0000000000000001  // argument 1
+	// 08(SP) 0xc00003e760:   0x0000000000000002  // argument 2
+	// 16(SP) 0xc00003e768:   0x0000000000000003  // return value 1 (1 + 2 ==  3)
+	// 24(SP) 0xc00003e770:   0xffffffffffffffff  // return value 2 (1 - 2 == -1)
+	// 32(SP) 0xc00003e778:   0x000000c00003e7d0	// Raw BP value
 	0x0033 00051 (main.go:11)	MOVQ	$2, (SP)
 	0x003b 00059 (main.go:11)	MOVQ	$3, 8(SP)
 	0x0044 00068 (main.go:11)	CALL	"".f1(SB)
@@ -104,3 +120,10 @@ go.cuinfo.packagename. SDWARFINFO dupok size=0
 	0x0010 00 00 00 00 00 00 00 00                          ........
 gclocals·33cdeccccebe80329f1fdbee7f5874cb SRODATA dupok size=8
 	0x0000 01 00 00 00 00 00 00 00                          ........
+
+
+	// As a conclusion (Without optimize)
+	// 1. function will allocate the space for locals and function return value
+	// 2. instruction call will push return address (push (1)ipc )
+	// 3. instruction retq will jmp to ((0)SP) and pop it
+	// 4. Base on 2 and 3, a function should allocate and free stack before return

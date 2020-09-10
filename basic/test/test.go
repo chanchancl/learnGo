@@ -3,9 +3,26 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"runtime"
 	"strings"
 	"sync"
 )
+
+func getpc(n int) {
+	pc, file, line, ok := runtime.Caller(0)
+	fmt.Printf("%x\n", pc)
+	fmt.Println(file)
+	fmt.Println(line)
+	fmt.Println(ok)
+	fmt.Println("****************************")
+	if n > 0 {
+		getpc(n - 1)
+	}
+}
+
+func main() {
+	getpc(2)
+}
 
 func removeTokenURLQuery(s string) string {
 	// Post "https://hostname:port/path/token?query": error
@@ -18,7 +35,7 @@ func removeTokenURLQuery(s string) string {
 	return strings.ReplaceAll(str, "\"", "")
 }
 
-func main() {
+func f8() {
 	s := "Post \"https://abcdefgtoken?asdbdsa315fe3sa23df\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
 	fmt.Println(removeTokenURLQuery(s))
 }

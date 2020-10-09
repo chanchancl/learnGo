@@ -3,7 +3,9 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
+	"os"
 	"runtime"
+	"runtime/pprof"
 	"strings"
 	"sync"
 )
@@ -22,6 +24,10 @@ func getpc(n int) {
 
 func main() {
 	getpc(2)
+
+	for _, profile := range pprof.Profiles() {
+		profile.WriteTo(os.Stdout, 1)
+	}
 }
 
 func removeTokenURLQuery(s string) string {

@@ -3,10 +3,16 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"io/ioutil"
 	"log"
-	"os"
 )
+
+type wWriter struct{}
+
+func (w *wWriter) Write(b []byte) (int, error) {
+	return 0, errors.New("233")
+}
 
 func main() {
 	cert, err := tls.LoadX509KeyPair("../certs/client.pem", "../certs/client.key")
@@ -27,12 +33,12 @@ func main() {
 		RootCAs:            clientCertPool,
 		Certificates:       []tls.Certificate{cert},
 		InsecureSkipVerify: true,
-		KeyLogWriter:       os.Stdout,
+		KeyLogWriter:       &wWriter{},
 	}
 
 	conn, err := tls.Dial("tcp", "localhost:8080", &conf)
 	if err != nil {
-		log.Println(err)
+		log.Printf("tls.Dial error %v", err.Error())
 		return
 	}
 	defer conn.Close()

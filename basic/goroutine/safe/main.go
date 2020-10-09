@@ -12,16 +12,12 @@ func main() {
 		for {
 			str := <-c
 			_ = str
-			time.Sleep(time.Second * 5)
+			time.Sleep(time.Millisecond)
 		}
 	}()
 
-	for i := 0; i < 100; i++ {
-		go func(i int) {
-			c <- string(i)
-			fmt.Printf("Writen %v Done.\n", i)
-		}(i)
+	for i := 0; i < 5; i++ {
+		c <- string(i)
+		fmt.Printf("Writen %v Done.\n", i)
 	}
-
-	select {}
 }

@@ -3,12 +3,33 @@ package main
 import (
 	"crypto/sha256"
 	"fmt"
-	"os"
 	"runtime"
-	"runtime/pprof"
 	"strings"
 	"sync"
 )
+
+func f9() {
+	a := []int{0, 1, 2, 3, 4, 5}
+
+	removeIndex := []int{0, 2, 5}
+
+	for i := range removeIndex {
+
+		b := make([]int, 6)
+		copy(b, a)
+
+		fmt.Println("||||||||||||||||||||||||||||||||||||||")
+		index := removeIndex[i]
+		fmt.Println(index)
+		fmt.Println(b[:index])
+		fmt.Println(b[index+1:])
+		fmt.Println(append(b[:index], b[index+1:]...))
+	}
+}
+
+func main() {
+	f9()
+}
 
 func getpc(n int) {
 	pc, file, line, ok := runtime.Caller(0)
@@ -19,14 +40,6 @@ func getpc(n int) {
 	fmt.Println("****************************")
 	if n > 0 {
 		getpc(n - 1)
-	}
-}
-
-func main() {
-	getpc(2)
-
-	for _, profile := range pprof.Profiles() {
-		profile.WriteTo(os.Stdout, 1)
 	}
 }
 

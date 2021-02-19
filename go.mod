@@ -8,6 +8,7 @@ require (
 	github.com/emicklei/proto v1.9.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gobuffalo/packr/v2 v2.8.0 // indirect
+	github.com/gorilla/mux v1.8.0
 	github.com/hkwi/h2c v0.0.0-20180807060133-3511cd63f456
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/mdempsky/gocode v0.0.0-20200405233807-4acdcbdea79d // indirect

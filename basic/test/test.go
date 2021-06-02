@@ -27,8 +27,23 @@ func f9() {
 	}
 }
 
+func f() (int, int) {
+	return 10, 10
+}
+
+func ff() (int, int) {
+	return 20, 20
+}
+
+func f10() {
+	initValue := runtime.GOMAXPROCS(1)
+
+	fmt.Println(initValue)
+	fmt.Println(runtime.NumCPU())
+}
+
 func main() {
-	f9()
+	f10()
 }
 
 func getpc(n int) {

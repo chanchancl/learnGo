@@ -67,7 +67,8 @@ type TestHandler struct{}
 
 func (h *TestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("{\"abc\":1234}"))
 }
 
 func main() {
@@ -80,8 +81,8 @@ func main() {
 		Handler: h2c.NewHandler(router, h2s),
 	}
 	GetHealth().SetReady()
-	router.Handle("/{ueId}/routing-info", GetHealth())
-	// router.Handle("/", &TestHandler{})
+	// router.Handle("/{ueId}/routing-info", GetHealth())
+	router.Handle("/", &TestHandler{})
 	router.NotFoundHandler = &TestHandler{}
 
 	server.ListenAndServe()

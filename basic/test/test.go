@@ -36,14 +36,32 @@ func ff() (int, int) {
 }
 
 func f10() {
-	initValue := runtime.GOMAXPROCS(1)
+	initValue := runtime.GOMAXPROCS(2)
 
 	fmt.Println(initValue)
 	fmt.Println(runtime.NumCPU())
 }
 
+var i = 0
+
+func f11f() *int {
+	defer func() { i += 1 }()
+	if i < 5 {
+		return nil
+	}
+	return &i
+}
+
+func f11() {
+	a := f11f()
+	for a == nil {
+		fmt.Println(i)
+		a = f11f()
+	}
+}
+
 func main() {
-	f10()
+	f11()
 }
 
 func getpc(n int) {

@@ -1,31 +1,26 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
 	"io/ioutil"
-	"net"
 	"net/http"
 	"os"
-	"strconv"
-
-	"golang.org/x/net/http2"
 )
 
 func main() {
-	url := "http://localhost:9001"
+	url := "http://localhost:5000/ping"
 
 	count := 0
 	client := http.Client{
-		Transport: &http2.Transport{
-			AllowHTTP: true,
-			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
-				return net.Dial(network, addr)
-			},
-		},
+		// Transport: &http2.Transport{
+		// 	AllowHTTP: true,
+		// 	DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+		// 		return net.Dial(network, addr)
+		// 	},
+		// },
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1; i++ {
 		go func() {
 			for {
 				count++
@@ -36,8 +31,7 @@ func main() {
 					continue
 				}
 				bd, _ := ioutil.ReadAll(resp.Body)
-				it, _ := strconv.Atoi(string(bd))
-				fmt.Println(it)
+				fmt.Println(string(bd))
 				resp.Body.Close()
 			}
 		}()

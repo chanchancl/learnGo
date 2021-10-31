@@ -1,59 +1,29 @@
 package main
 
 import (
-	"log"
+	"io/ioutil"
 	"net/http"
-	"strconv"
 	"sync"
-	"sync/atomic"
-	"time"
 
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
+	"github.com/gin-gonic/gin"
 )
 
 var (
-	mu                   sync.Mutex
-	rsp                  []byte
-	CurrentRequestNumber = int32(0)
-	RequestCount         = int32(0)
+	// logLevel = int32(0)
+	mutex sync.RWMutex
 )
 
-type TestHandler struct{}
-
-func (h *TestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	atomic.AddInt32(&CurrentRequestNumber, 1)
-	defer atomic.AddInt32(&CurrentRequestNumber, -1)
-	atomic.AddInt32(&RequestCount, 1)
-
-	// log.Println(RequestCount)
-
-	if RequestCount%100 == 0 {
-		// log.Message(log.Info, "Current Request Number", "TotalRequestCount", RequestCount, "CurrentWaitingRequestNumber", CurrentRequestNumber)
-		log.Printf("CurrentRequestNumber : %v, Total Request : %v\n", CurrentRequestNumber, RequestCount)
-	}
-
-	time.Sleep(500 * time.Millisecond)
-
-	st := strconv.Itoa(int(RequestCount))
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(st))
-}
-
 func main() {
-	// rsp = make([]byte, 1000)
-	// for i := 0; i < 1000; i++ {
-	// 	rsp[i] = byte(int('a') + i%26)
-	// }
+	r := gin.Default()
+	client := http.Client{}
+	r.GET("/ping", func(c *gin.Context) {
+		rsp, _ := client.Get("http://localhost:5001/ping")
+		bd, _ := ioutil.ReadAll(rsp.Body)
+		defer func() { rsp.Body.Close() }()
 
-	h2s := &http2.Server{}
-	port := "9001"
-
-	server := &http.Server{
-		Addr:    ":" + port,
-		Handler: h2c.NewHandler(&TestHandler{}, h2s),
-	}
-
-	server.ListenAndServe()
-
+		c.JSON(200, gin.H{
+			"message": string(bd),
+		})
+	})
+	r.Run(":5000") // listen and serve on 0.0.0.0:8080
 }

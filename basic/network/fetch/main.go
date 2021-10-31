@@ -19,12 +19,12 @@ func main() {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
-		defer resp.Body.Close()
 
 		if _, err := io.Copy(os.Stdout, resp.Body); err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
 			os.Exit(1)
 		}
+		resp.Body.Close()
 		fmt.Printf("%d : %s", resp.StatusCode, resp.Status)
 	}
 }

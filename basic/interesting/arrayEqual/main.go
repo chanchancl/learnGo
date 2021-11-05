@@ -13,10 +13,9 @@ func main() {
 		fmt.Println("not equal")
 	}
 
-	
-	if a[:] == b[:] {
-	  fmt.Println("equal")
-	} else {
-	  fmt.Println("not equal")
-	}
+	// if a[:] == b[:] {
+	//   fmt.Println("equal")
+	// } else {
+	//   fmt.Println("not equal")
+	// }
 }

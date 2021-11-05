@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	N            = 64
+	N            = 256
 	MAX_STEP     = 64
 	MAX_DISTANCE = 3.0
 	EPSILON      = 1e-6
@@ -55,13 +55,18 @@ func subtractOp(a, b SceneResult) SceneResult {
 	return r
 }
 
-func scene(x, y float64) SceneResult {
-	r1 := SceneResult{circleSDF(x, y, 0.3, 0.5, 0.2), 2}
-	r2 := SceneResult{circleSDF(x, y, 0.42, 0.5, 0.1), 0.2}
-	r3 := SceneResult{circleSDF(x, y, 0.7, 0.5, 0.05), 2}
+// 0.29/2+0.5
+// 0.145+0.5
+// 0.645
 
-	return unionOp(subtractOp(r1, r2), r3)
-	//return unionOp(unionOp(r1, r2), r3)
+// 0.5+-0.29*sqrt(3)
+func scene(x, y float64) SceneResult {
+	r1 := SceneResult{circleSDF(x, y, 0.5, 0.21, 0.1), 2}
+	r2 := SceneResult{circleSDF(x, y, 0.2489, 0.645, 0.1), 0.3}
+	r3 := SceneResult{circleSDF(x, y, 0.7511, 0.645, 0.1), 0.3}
+
+	// return unionOp(subtractOp(r1, r2), r3)
+	return unionOp(unionOp(r1, r2), r3)
 }
 
 func trace(ox, oy, dx, dy float64) float64 {

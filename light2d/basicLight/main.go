@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
+	"learnGo/light2d/basic"
 	light "learnGo/light2d/basic"
 	"math"
-	"math/rand"
 	"os"
 	"time"
 )
 
 const (
-	N            = 64
+	N            = 128
 	MAX_STEP     = 64
 	MAX_DISTANCE = 3.0
 	EPSILON      = 1e-6
@@ -36,21 +36,6 @@ func trace(ox, oy, dx, dy float64) float64 {
 	return 0.0
 }
 
-func (this MySampler) Sample(x, y float64) float64 {
-	var sum float64
-	for i := 0; i < N; i++ {
-		// 随机采样 N 次， [0, 2pi]
-		// a := 2.0 * math.Pi * rand.Float64()
-		// 均匀采样 N 次，将[0, 2pi] 分为 N 等份
-		// a := 2 * math.Pi * float64(i) / N
-
-		// 均匀加随机， 分成等份的同时，在前后有[0,1]弧度的浮动
-		a := 2.0 * math.Pi * (float64(i) + rand.Float64()) / N
-		sum += trace(x, y, math.Cos(float64(a)), math.Sin(float64(a)))
-	}
-	return sum / N
-}
-
 func main() {
 	file, err := os.Create("output.png")
 	if err != nil {
@@ -63,9 +48,9 @@ func main() {
 	W := 512
 
 	start := time.Now()
-	render := light.NewRender(&light.RenderConfig{W, H})
+	render := light.NewRender(basic.NewRenderConfig(W, H))
 
-	render.SetSampler(MySampler{})
+	render.SetSampler(light.NewRandomSampler(N, trace))
 	render.BeginRender()
 
 	fmt.Printf("%vx%v use time %vs\n", W, H, time.Since(start))

@@ -3,11 +3,13 @@ package main
 import (
 	"crypto/tls"
 	"log"
+	"os"
 )
 
 func main() {
 	conf := tls.Config{
-		InsecureSkipVerify: false,
+		InsecureSkipVerify: true,
+		KeyLogWriter:       os.Stdout,
 	}
 
 	conn, err := tls.Dial("tcp", "localhost:8080", &conf)

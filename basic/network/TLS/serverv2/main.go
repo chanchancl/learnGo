@@ -4,35 +4,40 @@ import (
 	"bufio"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/pem"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net"
+	"os"
 )
 
 func main() {
-	cert, err := tls.LoadX509KeyPair("../certs/server.pem", "../certs/server.key")
+	cert, err := tls.LoadX509KeyPair("../certs/server.crt", "../certs/serverPrivKey.pem")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	certBytes, err := ioutil.ReadFile("../certs/client.pem")
+	certBytes, err := ioutil.ReadFile("../certs/caRootCert.crt")
 	if err != nil {
-		panic("Unable to read cert.pem")
+		panic("Unable to read caRootCert.crt")
 	}
+	certBlock, _ := pem.Decode(certBytes)
+	rootCert, _ := x509.ParseCertificate(certBlock.Bytes)
 
-	clientCertPool := x509.NewCertPool()
-	ok := clientCertPool.AppendCertsFromPEM(certBytes)
-	if !ok {
-		panic("Failed to parse root certificate")
-	}
+	rootCertPool := x509.NewCertPool()
+	rootCertPool.AddCert(rootCert)
 
 	config := tls.Config{
 		Certificates: []tls.Certificate{cert},
 		ClientAuth:   tls.RequireAndVerifyClientCert,
-		ClientCAs:    clientCertPool,
-		//KeyLogWriter: os.Stdout,
+		ClientCAs:    rootCertPool,
+		KeyLogWriter: os.Stdout,
 	}
+
+	fmt.Println("Listening :8080")
 	ln, err := tls.Listen("tcp", ":8080", &config)
 	if err != nil {
 		log.Println(err)
@@ -52,13 +57,16 @@ func main() {
 
 func handleConn(conn net.Conn) {
 	defer conn.Close()
-	log.Printf("Connect to %s\n", conn.RemoteAddr())
+	log.Printf("Connect from %s\n", conn.RemoteAddr())
 
 	r := bufio.NewReader(conn)
 	for {
 		msg, err := r.ReadString('\n')
+		if err == io.EOF {
+			return
+		}
 		if err != nil {
-			log.Println(err)
+			fmt.Printf("Meet an error %v", err)
 			return
 		}
 		log.Printf("Received : %s", msg)

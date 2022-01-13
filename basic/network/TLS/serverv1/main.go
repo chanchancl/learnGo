@@ -3,13 +3,14 @@ package main
 import (
 	"bufio"
 	"crypto/tls"
+	"io"
 	"log"
 	"net"
 	"os"
 )
 
 func main() {
-	cert, err := tls.LoadX509KeyPair("../certs/server.pem", "../certs/server.key")
+	cert, err := tls.LoadX509KeyPair("../certs/server.crt", "../certs/serverPrivKey.pem")
 	if err != nil {
 		log.Println(err)
 		return
@@ -40,6 +41,9 @@ func handleConn(conn net.Conn) {
 	r := bufio.NewReader(conn)
 	for {
 		msg, err := r.ReadString('\n')
+		if err == io.EOF {
+			return
+		}
 		if err != nil {
 			log.Println(err)
 			return

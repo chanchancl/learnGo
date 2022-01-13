@@ -3,7 +3,8 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"errors"
+	"encoding/pem"
+	"fmt"
 	"io/ioutil"
 	"log"
 )
@@ -11,26 +12,29 @@ import (
 type wWriter struct{}
 
 func (w *wWriter) Write(b []byte) (int, error) {
-	return 0, errors.New("233")
+	fmt.Print(string(b))
+	return len(b), nil
 }
 
 func main() {
-	cert, err := tls.LoadX509KeyPair("../certs/client.pem", "../certs/client.key")
+	cert, err := tls.LoadX509KeyPair("../certs/client.crt", "../certs/clientPrivKey.pem")
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	certBytes, err := ioutil.ReadFile("../certs/client.pem")
+
+	certBytes, err := ioutil.ReadFile("../certs/caRootCert.crt")
 	if err != nil {
-		panic("Unable to read cert.pem")
+		panic("Unable to read caRootCert.crt")
 	}
-	clientCertPool := x509.NewCertPool()
-	ok := clientCertPool.AppendCertsFromPEM(certBytes)
-	if !ok {
-		panic("Failed to parse root certificate")
-	}
+	certBlock, _ := pem.Decode(certBytes)
+	rootCert, _ := x509.ParseCertificate(certBlock.Bytes)
+
+	rootCertPool := x509.NewCertPool()
+	rootCertPool.AddCert(rootCert)
+
 	conf := tls.Config{
-		RootCAs:            clientCertPool,
+		RootCAs:            rootCertPool,
 		Certificates:       []tls.Certificate{cert},
 		InsecureSkipVerify: true,
 		KeyLogWriter:       &wWriter{},
@@ -38,7 +42,7 @@ func main() {
 
 	conn, err := tls.Dial("tcp", "localhost:8080", &conf)
 	if err != nil {
-		log.Printf("tls.Dial error %v", err.Error())
+		log.Printf("tls.Dial error %v", err)
 		return
 	}
 	defer conn.Close()

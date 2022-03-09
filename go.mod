@@ -19,6 +19,7 @@ require (
 	github.com/segmentio/kafka-go v0.4.1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/ugorji/go v1.2.6 // indirect
+	go.uber.org/zap v1.20.0 // indirect
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210525063256-abc453219eb5
 	golang.org/x/sys v0.0.0-20210601080250-7ecdf8ef093b // indirect

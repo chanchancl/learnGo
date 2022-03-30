@@ -8,7 +8,7 @@ import (
 
 	"time"
 
-	timeProto "learnGo/grpc/time"
+	timeProto "learnGo/basic/network/grpc/time"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"

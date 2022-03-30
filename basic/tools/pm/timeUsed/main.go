@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -23,8 +24,7 @@ func main() {
 		}
 	}()
 
-	fmt.Println("Listening!")
-	http.Handle("/metrics", prometheus.Handler())
+	http.Handle("/metrics", promhttp.Handler())
+	fmt.Println("Listening on : http://localhost:8080/metrics")
 	log.Fatal(http.ListenAndServe(":8080", nil))
-
 }

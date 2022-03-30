@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"learnGo/github"
+	"learnGo/basic/network/github"
 )
 
 func main() {

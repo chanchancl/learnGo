@@ -6,7 +6,7 @@ import (
 	"text/template"
 	"time"
 
-	"learnGo/github"
+	"learnGo/basic/network/github"
 )
 
 const templ = `{{.TotalCount}} issues:

@@ -2,7 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Ta struct {
@@ -22,12 +23,13 @@ func main() {
 	}
 	a.D = 0
 	b, _ := json.Marshal(a)
-	fmt.Println(string(b))
+	log.Info().Bytes("b", b).Msg("")
 
 	a = MyJsonName{
 		B: "2",
 	}
 	b, _ = json.Marshal(a)
 
-	fmt.Println(string(b))
+	log.Info().Interface("a", a).Msg("")
+	log.Info().Bytes("b", b).Msg("")
 }

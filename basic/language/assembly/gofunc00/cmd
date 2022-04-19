@@ -1,2 +1,1 @@
-go tool compile -S -N -l main.go > main.S
-rm -f main.o
+../cmd

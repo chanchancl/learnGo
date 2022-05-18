@@ -47,12 +47,13 @@ func CreateTable(db *bun.DB) {
 	// Model guide
 	// https://bun.uptrace.dev/guide/models.html#mapping-tables-to-structs
 
-	users := []struct {
+	type User struct {
 		bun.BaseModel `bun:"table:users,alias:u"`
 
 		ID   int64  `bun:"id,pk,autoincrement"`
 		Name string `bun:"name,notnull"`
-	}{}
+	}
+	user := User{}
 	var errs []error
 	defer func() {
 		if len(errs) != 0 {
@@ -62,11 +63,23 @@ func CreateTable(db *bun.DB) {
 		}
 	}()
 
-	_, err := db.NewCreateTable().Model(&users).IfNotExists().Exec(context.Background())
+	_, err := db.NewCreateTable().Model(&user).IfNotExists().Exec(context.Background())
 	if err != nil {
 		errs = append(errs, err)
 		return
 	}
+
+	users := []User{
+		{
+			Name: "Name1",
+		},
+		{
+			Name: "Name2",
+		},
+	}
+
+	db.NewInsert().Model(&users).Exec(context.Background())
+
 	cnt, err := db.NewSelect().Model(&users).ScanAndCount(context.Background())
 	if err != nil {
 		errs = append(errs, err)

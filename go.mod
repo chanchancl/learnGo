@@ -3,6 +3,7 @@ module learnGo
 go 1.18
 
 require (
+	github.com/buger/jsonparser v1.1.1
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/gin-gonic/gin v1.7.7
@@ -13,6 +14,7 @@ require (
 	github.com/prometheus/client_golang v1.12.1
 	github.com/qri-io/jsonschema v0.2.1
 	github.com/rs/zerolog v1.26.1
+	github.com/samber/lo v1.13.0
 	github.com/segmentio/kafka-go v0.4.30
 	github.com/sirupsen/logrus v1.8.1
 	github.com/uptrace/bun v1.1.3
@@ -57,7 +59,6 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/qri-io/jsonpointer v0.1.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
-	github.com/samber/lo v1.13.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

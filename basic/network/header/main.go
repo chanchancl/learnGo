@@ -1,20 +1,18 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 func main() {
-	response := f1()
+	hd := http.Header{}
 
-	print(response.Header.Get("test"))
+	hd.Add("wow", "value1")
+	hd.Add("wow", "value2")
 
-}
+	hd.Set("moe", "value1")
+	hd.Set("moe", "value2")
 
-func f1() *http.Response {
-	resp, _ := http.Get("http://www.baidu.com")
-	defer tag(resp.Header)
-	return resp
-}
-
-func tag(header http.Header) {
-	header.Set("test", "233")
+	fmt.Println(hd.)
 }

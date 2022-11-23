@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	}()
 
 	for i := 0; i < 5; i++ {
-		c <- string(i)
+		c <- strconv.Itoa(i)
 		fmt.Printf("Writen %v Done.\n", i)
 	}
 }

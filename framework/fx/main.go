@@ -24,6 +24,10 @@ func T2Construct(str string, t *T1) *T2 {
 	return nil
 }
 
+func T3NeedString(str string, s int) *T3 {
+	return nil
+}
+
 func main() {
 	opts := []fx.Option{}
 	opts = append(opts,
@@ -33,6 +37,7 @@ func main() {
 			return ""
 		}),
 		fx.Provide(T2Construct),
+		fx.Invoke(T3NeedString),
 	)
 
 	// fx.Provide

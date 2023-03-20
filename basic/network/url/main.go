@@ -24,4 +24,14 @@ func main() {
 	for i, v := range u.Query() {
 		fmt.Printf("Query    %v : %v\n", i, v[0])
 	}
+
+	url2 := "https://[0011::EEFF]:1004/abc/def?a=20&c=abc"
+	u, err := url.Parse(url2)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(u)
+	fmt.Println(u.Hostname())
+	fmt.Println(u.Host)
 }

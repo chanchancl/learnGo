@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 
 	"go.uber.org/fx"
 )
@@ -47,4 +48,22 @@ func main() {
 	app := fx.New(opts...)
 
 	app.Run()
+
+	Provide(T2Construct)
+}
+
+func Provide(fn interface{}) {
+	tp := reflect.TypeOf(fn)
+
+	fmt.Println(tp, tp.Kind())
+
+	fmt.Println("Input:")
+	for i := 0; i < tp.NumIn(); i++ {
+		fmt.Println("\t" + tp.In(i).String())
+	}
+
+	fmt.Println("Output:")
+	for i := 0; i < tp.NumOut(); i++ {
+		fmt.Println("\t" + tp.Out(i).String())
+	}
 }

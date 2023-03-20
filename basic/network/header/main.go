@@ -14,5 +14,5 @@ func main() {
 	hd.Set("moe", "value1")
 	hd.Set("moe", "value2")
 
-	fmt.Println(hd.)
+	fmt.Println(hd)
 }

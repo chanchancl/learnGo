@@ -4,6 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
+
+	"github.com/go-faker/faker/v4"
 
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
@@ -12,6 +15,8 @@ import (
 )
 
 type Book struct {
+	bun.BaseModel `bun:"table:BooksTable,alias:bk"`
+
 	Title string
 	Price int
 }
@@ -29,16 +34,22 @@ func main() {
 	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 
 	ctx := context.Background()
-	_, err = db.NewCreateTable().Model((*Book)(nil)).IfNotExists().Exec(ctx)
-	if err != nil {
-		panic(err)
+
+	db.NewCreateTable().Model((*Book)(nil)).IfNotExists().Exec(ctx)
+
+	book := Book{
+		Title: faker.Username(),
+		Price: int(time.Now().Unix()),
 	}
+	db.NewInsert().Model(&book).Exec(ctx)
 
 	bk := []Book{}
 	err = db.NewSelect().Model(&bk).Scan(ctx)
 	if err != nil {
 		panic(err)
 	}
+
+	db.NewDropTable().Model((*Book)(nil)).Exec(ctx)
 
 	fmt.Println(bk)
 }

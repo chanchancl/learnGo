@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
+	"crypto/rand"
 	"crypto/sha256"
-	"math/rand"
 	"testing"
 )
 
@@ -17,6 +17,7 @@ func Benchmark_CompareByteArray(b *testing.B) {
 
 	rand.Read(lbts[:])
 	copy(rbts[:], lbts[:])
+	b.Log(lbts, rbts)
 
 	b.Run("CompareWithEqualOperator", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {

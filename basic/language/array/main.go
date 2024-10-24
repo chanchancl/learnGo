@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 func main() {
@@ -27,4 +28,22 @@ func main() {
 	b := make([]int, len(a))
 	copy(b, a)
 	fmt.Println(a, b)
+
+	iarray := []string{"a", "b", "c"}
+
+	wg := sync.WaitGroup{}
+	done := make(chan bool)
+	for i, k := range iarray {
+		wg.Add(1)
+		go func() {
+			<-done
+			fmt.Println(i, k, &i, &k)
+			wg.Done()
+		}()
+	}
+
+	for _ = range iarray {
+		done <- true
+	}
+	wg.Wait()
 }

@@ -1,8 +1,9 @@
 module learnGo
 
-go 1.21
+go 1.23.0
 
 require (
+	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/buger/jsonparser v1.1.1
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/davecgh/go-spew v1.1.1
@@ -11,14 +12,17 @@ require (
 	github.com/go-faker/faker/v4 v4.2.0
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/golang/protobuf v1.5.3
+	github.com/google/gopacket v1.1.19
 	github.com/gorilla/mux v1.8.0
 	github.com/hkwi/h2c v0.0.0-20180807060133-3511cd63f456
+	github.com/kr/pretty v0.3.1
 	github.com/prometheus/client_golang v1.16.0
 	github.com/qri-io/jsonschema v0.2.1
 	github.com/rs/zerolog v1.30.0
 	github.com/samber/lo v1.38.1
 	github.com/segmentio/kafka-go v0.4.42
 	github.com/sirupsen/logrus v1.9.3
+	github.com/songgao/water v0.0.0-20200317203138-2b4b6d7c09d8
 	github.com/uptrace/bun v1.1.14
 	github.com/uptrace/bun/dialect/pgdialect v1.1.14
 	github.com/uptrace/bun/dialect/sqlitedialect v1.1.14
@@ -56,6 +60,7 @@ require (
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
@@ -72,6 +77,7 @@ require (
 	github.com/qri-io/jsonpointer v0.1.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect

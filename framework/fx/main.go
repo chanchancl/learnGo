@@ -16,7 +16,7 @@ func T1Construct() *T1 {
 	return nil
 }
 
-func InvokeNeedT1(t *T1, tt *T2) {
+func InvokeNeedT1T2(t *T1, tt *T2) {
 	fmt.Println("Invoke need T1 is call")
 }
 
@@ -25,20 +25,21 @@ func T2Construct(str string, t *T1) *T2 {
 	return nil
 }
 
-func T3NeedString(str string, s int) *T3 {
+func T3NeedString(str string) *T3 {
 	return nil
 }
 
+// An autoinject framework
 func main() {
 	opts := []fx.Option{}
 	opts = append(opts,
-		fx.Invoke(InvokeNeedT1),
-		fx.Provide(T1Construct),
-		fx.Provide(func() string {
+		fx.Invoke(InvokeNeedT1T2), // Need     T1 T2
+		fx.Provide(T1Construct),   // Provide  T1
+		fx.Provide(func() string { // Provide  string
 			return ""
 		}),
-		fx.Provide(T2Construct),
-		fx.Invoke(T3NeedString),
+		fx.Provide(T2Construct), // Provide 	   T2
+		fx.Invoke(T3NeedString), // Need     string
 	)
 
 	// fx.Provide

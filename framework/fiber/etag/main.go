@@ -23,7 +23,7 @@ func main() {
 	})
 
 	// app.Use(func(c *fiber.Ctx) error {
-	// 	log.Println("Run B")
+	// 	log.Println("Run B, and stop here")
 
 	// 	// Stop here, will not Run C
 	// 	return nil

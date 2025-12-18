@@ -22,11 +22,12 @@ func main() {
 	iface, err := water.New(water.Config{
 		DeviceType: water.TAP,
 		PlatformSpecificParams: water.PlatformSpecificParams{
-			Name: deviceName,
+			InterfaceName: deviceName,
 		},
 	})
 	if err != nil {
 		fmt.Println("Error to create tap")
+		fmt.Println("This is only available on linux")
 		return
 	}
 

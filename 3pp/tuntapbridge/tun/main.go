@@ -21,7 +21,7 @@ func main() {
 	iface, err := water.New(water.Config{
 		DeviceType: water.TUN,
 		PlatformSpecificParams: water.PlatformSpecificParams{
-			Name: deviceName,
+			InterfaceName: deviceName,
 		},
 	})
 	if err != nil {

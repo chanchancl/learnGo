@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"sync"
+	"time"
 
 	"github.com/xtaci/smux"
 )
@@ -20,8 +21,12 @@ func openConn() (conn1, conn2 net.Conn) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
 		conn1, err = net.Dial("tcp", addr)
+		defer wg.Done()
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -32,6 +37,7 @@ func openConn() (conn1, conn2 net.Conn) {
 		fmt.Println(err.Error())
 	}
 
+	wg.Wait()
 	return conn1, conn2
 }
 
@@ -51,7 +57,7 @@ func server(conn net.Conn) {
 	for i := 0; i < n; i++ {
 		var buf [512]byte
 		nn, _ := streams[i].Read(buf[:])
-		fmt.Printf("Recv on %d stream with %s\n", i, string(buf[:nn]))
+		fmt.Printf("%v,   Recv on %d stream with %s\n", time.Now(), i, string(buf[:nn]))
 	}
 }
 
@@ -70,13 +76,13 @@ func client(conn net.Conn) {
 
 	for i := 0; i < n; i++ {
 		streams[i].Write([]byte{hello[i]})
-		fmt.Printf("Send on %d stream with : %s\n", i, string(hello[i]))
+		fmt.Printf("%v, Send on %d stream with : %s\n", time.Now(), i, string(hello[i]))
 	}
 }
 
 func main() {
 	conn1, conn2 := openConn()
-	// fmt.Println(conn1, conn2)
+	fmt.Println(conn1, conn2)
 
 	group.Add(2)
 	go server(conn1)

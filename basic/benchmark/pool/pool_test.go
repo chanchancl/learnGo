@@ -6,38 +6,85 @@ import (
 )
 
 type Small struct {
-	a int
+	a [10]int
 }
 
-var pool = sync.Pool{
+type Medium struct {
+	a [1000]int
+}
+
+type Large struct {
+	a [100000]int
+}
+
+var smallPool = sync.Pool{
 	New: func() interface{} { return new(Small) },
 }
 
-//go:noinline
-func inc(s *Small) { s.a++ }
-
-func BenchmarkWithoutPool(b *testing.B) {
-	var s *Small
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < 10000; j++ {
-			s = &Small{a: 1}
-			b.StopTimer()
-			inc(s)
-			b.StartTimer()
-		}
-	}
+var mediumPool = sync.Pool{
+	New: func() interface{} { return new(Medium) },
 }
 
-func BenchmarkWithPool(b *testing.B) {
-	var s *Small
-	for i := 0; i < b.N; i++ {
-		for j := 0; j < 10000; j++ {
-			s = pool.Get().(*Small)
-			s.a = 1
-			b.StopTimer()
-			inc(s)
-			b.StartTimer()
-			pool.Put(s)
+var largePool = sync.Pool{
+	New: func() interface{} { return new(Large) },
+}
+
+
+var globalSink *Small
+var globalSinkMedium *Medium
+var globalSinkLarge *Large
+
+func Benchmark_Small(b *testing.B) {
+	b.Run("WithoutPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			s := &Small{}
+			s.a[0] = 42
+			globalSink = s
 		}
-	}
+	})
+	b.Run("WithPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			s := smallPool.Get().(*Small)
+			s.a[0] = 42
+			smallPool.Put(s)
+			globalSink = s
+		}
+	})
+}
+
+func Benchmark_Medium(b *testing.B) {
+	b.Run("WithoutPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			m := &Medium{}
+			m.a[0] = 42
+			globalSinkMedium = m
+		}
+	})
+	b.Run("WithPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			m := mediumPool.Get().(*Medium)
+			m.a[0] = 42
+			mediumPool.Put(m)
+			globalSinkMedium = m
+		}
+	})
+}
+
+
+func Benchmark_Large(b *testing.B) {
+	b.Run("WithoutPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			l := &Large{}
+			l.a[0] = 42
+			globalSinkLarge = l
+		}
+	})
+	b.Run("WithPool", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			l := largePool.Get().(*Large)
+			l.a[0] = 42
+			largePool.Put(l)
+			globalSinkLarge = l
+		}
+	})
 }
